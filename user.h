@@ -2,7 +2,6 @@
 #define USER_H
 
 #include <QString>
-#include <QVariant>
 
 class User
 {
@@ -20,6 +19,7 @@ public:
     QString get_sec_ques_answer();
     QString get_role();
     int get_sec_ques();
+    int get_session_id();
 
     void set_name(QString name);
     void set_login(QString login);
@@ -27,6 +27,7 @@ public:
     void set_sec_ques_answer(QString ans);
     void set_sec_ques(int sec_ques);
     void set_role(QString r);
+    void set_session_id(int session_id);
 
 private:
     QString name;
@@ -35,6 +36,7 @@ private:
     QString sec_ques_answer;
     Role role;
     int sec_ques;
+    int session_id;
 };
 
 #endif // USER_H

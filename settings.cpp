@@ -54,7 +54,14 @@ void Settings::on_save_data_clicked()
         db.update_user_login(current_user->get_login(), ui->login->text());
         is_changed = true;
     }
-
+    if (ui->sec_ques->currentIndex() != current_user->get_sec_ques()) {
+        db.update_user_secret_question(current_user->get_login(), ui->sec_ques->currentIndex());
+        is_changed = true;
+    }
+    if (ui->sec_ques_answer->text() != current_user->get_sec_ques_answer()) {
+        db.update_user_secret_question_answer(current_user->get_login(), ui->sec_ques_answer->text());
+        is_changed = true;
+    }
     if (is_changed) {
         current_user = db.pull_user(ui->login->text());
     }
@@ -63,7 +70,6 @@ void Settings::on_save_data_clicked()
 }
 
 void Settings::update_ui() {
-
     ui->name->setText(current_user->get_name());
     ui->login->setText(current_user->get_login());
     ui->password->setText(current_user->get_password());
@@ -92,4 +98,3 @@ void Settings::on_back_clicked()
         emit send_data(current_user);
     }
 }
-

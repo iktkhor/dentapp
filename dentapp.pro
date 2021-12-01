@@ -20,6 +20,7 @@ SOURCES += \
     entrywindow.cpp \
     registrateaccount.cpp \
     remindpassword.cpp \
+    session.cpp \
     settings.cpp \
     user.cpp
 
@@ -34,6 +35,7 @@ HEADERS += \
     entrywindow.h \
     registrateaccount.h \
     remindpassword.h \
+    session.h \
     settings.h \
     user.h
 

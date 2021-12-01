@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
+    <width>780</width>
     <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>580</width>
+    <width>780</width>
     <height>480</height>
    </size>
   </property>
@@ -107,7 +107,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="manage_sessions">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -121,7 +121,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>542</width>
+             <width>742</width>
              <height>312</height>
             </rect>
            </property>
@@ -130,12 +130,17 @@
              <widget class="QTableWidget" name="sessions_table">
               <column>
                <property name="text">
-                <string>Имя</string>
+                <string>id</string>
                </property>
               </column>
               <column>
                <property name="text">
-                <string>Тип</string>
+                <string>Доктор</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Клиент</string>
                </property>
               </column>
               <column>
@@ -151,6 +156,11 @@
               <column>
                <property name="text">
                 <string>Кабинет</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Занято</string>
                </property>
               </column>
              </widget>
@@ -173,7 +183,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>334</width>
+             <width>396</width>
              <height>312</height>
             </rect>
            </property>
@@ -203,8 +213,14 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="leftMargin">
+           <number>70</number>
+          </property>
           <property name="topMargin">
            <number>65</number>
+          </property>
+          <property name="rightMargin">
+           <number>70</number>
           </property>
           <property name="bottomMargin">
            <number>65</number>
@@ -289,7 +305,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>580</width>
+     <width>780</width>
      <height>21</height>
     </rect>
    </property>

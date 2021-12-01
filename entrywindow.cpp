@@ -30,7 +30,11 @@ EntryWindow::EntryWindow(QWidget *parent)
 
     connect(ui->button_entry, &QPushButton::clicked, this, &EntryWindow::on_entry_clicked);
 
-    connect(this, SIGNAL(send_data(User*)), client_menu_window, SLOT(recieve_data(User*)));
+    connect(this, &EntryWindow::send_data, client_menu_window, &ClientMenu::recieve_data);
+
+    connect(this, &EntryWindow::update_table, admin_menu_window, &AdminMenu::update_sessions);
+
+    connect(this, &EntryWindow::update_table, client_menu_window, &ClientMenu::update_ui);
 
     is_pass_vis = false;
     ui->lineEdit_password->setEchoMode(QLineEdit::Password);
@@ -55,6 +59,7 @@ void EntryWindow::on_entry_clicked()
         if (role == "Client") {
             this->close();
             emit send_data(db.pull_user(log));
+            emit update_table();
             ui->lineEdit_password->setText("");
             client_menu_window->show();
         } else if (role == "Doctor") {
@@ -63,8 +68,9 @@ void EntryWindow::on_entry_clicked()
             doctor_menu_window->show();
         } else if (role == "Admin") {
             this->close();
-            ui->lineEdit_password->setText("");       
-            admin_menu_window->show();
+            ui->lineEdit_password->setText("");
+            emit update_table();
+            admin_menu_window->show();         
         }
     } else {
         QMessageBox::information(this, "Предупреждение"

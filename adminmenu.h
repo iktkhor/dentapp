@@ -25,6 +25,10 @@ public:
 
 signals:
     void entryWindow();
+    void update();
+
+public slots:
+    void update_sessions();
 
 private slots:
     void on_log_out_clicked();
@@ -37,15 +41,19 @@ private slots:
 
     void on_add_doctor_clicked();
 
+    void on_delete_session_clicked();
+
+    void on_cancel_app_clicked();
+
 private:
     Ui::AdminMenu *ui;
     DataBase db;
     AddDoctor *add_doctor;
     AddSession *add_session;
 
-    void update_sessins();
     void update_users();
-    void fill_table_users(std::vector<User> users);
+    void fill_table_sessions(std::vector<Session> sessions);
+    void fill_table_users(std::vector<User> users);   
     void set_enabled_buttons(bool b);
 };
 

@@ -53,6 +53,10 @@ int User::get_sec_ques() {
     return sec_ques;
 }
 
+int User::get_session_id() {
+    return session_id;
+}
+
 void User::set_name(QString name) {
     this->name = name;
 }
@@ -81,4 +85,8 @@ void User::set_role(QString r) {
     } else if (r == "Admin") {
         role = Admin;
     }
+}
+
+void User::set_session_id(int session_id) {
+    this->session_id = session_id;
 }

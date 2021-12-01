@@ -31,6 +31,7 @@ public:
 
 signals:
     void send_data(User* user);
+    void update_table();
 
 private slots:
     void on_entry_clicked();

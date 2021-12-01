@@ -5,7 +5,6 @@ AddDoctor::AddDoctor(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddDoctor)
 {
-    //clear_ui();
     ui->setupUi(this);
 
     db.connect_to_database();

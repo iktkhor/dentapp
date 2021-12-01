@@ -14,6 +14,10 @@ AdminMenu::AdminMenu(QWidget *parent) :
     add_session = new AddSession(this);
 
     connect(add_doctor, &AddDoctor::update, this, &AdminMenu::update_users);
+
+    connect(add_session, &AddSession::update, this, &AdminMenu::update_sessions);
+
+    connect(this, &AdminMenu::update, add_session, &AddSession::update_ui);
 }
 
 AdminMenu::~AdminMenu()
@@ -30,6 +34,7 @@ void AdminMenu::on_log_out_clicked()
 void AdminMenu::on_add_session_clicked()
 {
     add_session->show();
+    emit update();
 }
 
 void AdminMenu::on_delete_acc_clicked()
@@ -43,25 +48,60 @@ void AdminMenu::on_delete_acc_clicked()
     }
 
     for (auto row : selected_rows) {
-        auto article = ui->users_table->item(row, 1)->text();
-        removed_users.insert(article);
+        auto login = ui->users_table->item(row, 1)->text();
+        removed_users.insert(login);
     }
 
     for (auto user : removed_users) {
         db.remove_user(user);
+        db.remove_session(user);
     }
 
     update_users();
 }
 
+void AdminMenu::on_delete_session_clicked() {
 
-void AdminMenu::on_add_doctor_clicked()
-{
+    QList<QTableWidgetItem*> selectedItems = ui->sessions_table->selectedItems();
+    std::set<int> selected_rows;
+
+    for (auto item : selectedItems) {
+        selected_rows.insert(item->row());
+    }
+
+    for (auto row : selected_rows) {
+        QString id = ui->sessions_table->item(row, 0)->text();
+        db.remove_session(id.toInt());
+    }
+
+    update_sessions();
+}
+
+
+void AdminMenu::on_cancel_app_clicked() {
+    QList<QTableWidgetItem*> selectedItems = ui->sessions_table->selectedItems();
+    std::set<int> selected_rows;
+
+    for (auto item : selectedItems) {
+        selected_rows.insert(item->row());
+    }
+
+    for (auto row : selected_rows) {
+        QString id = ui->sessions_table->item(row, 0)->text();
+
+        if (db.pull_session_is_busy(id.toInt())) {
+            db.update_session(id.toInt());
+        }
+    }
+
+    update_sessions();
+}
+
+void AdminMenu::on_add_doctor_clicked() {
     add_doctor->show();
 }
 
-void AdminMenu::on_change_tables_clicked()
-{
+void AdminMenu::on_change_tables_clicked() {
     if (ui->stackedWidget->currentIndex() == 0) {
         ui->change_tables->setText("Управление сеансами");
         set_enabled_buttons(false);
@@ -71,12 +111,30 @@ void AdminMenu::on_change_tables_clicked()
         ui->change_tables->setText("Управление аккаунтами");
         set_enabled_buttons(true);
         ui->stackedWidget->setCurrentIndex(0);
+        update_sessions();
     }
 
 }
 
-void AdminMenu::update_sessins() {
+void AdminMenu::update_sessions() {
+    ui->sessions_table->setRowCount(0);
 
+    for (auto session : db.sessions()) {
+        int ind = ui->sessions_table->rowCount();
+        ui->sessions_table->insertRow(ind);
+
+        QString id;
+        id.setNum(session.get_id());
+        QString cabinet;
+        cabinet.setNum(session.get_cabinet());
+        ui->sessions_table->setItem(ind, 0, new QTableWidgetItem(id));
+        ui->sessions_table->setItem(ind, 1, new QTableWidgetItem(session.get_doctor_id()));
+        ui->sessions_table->setItem(ind, 2, new QTableWidgetItem(session.get_client_id()));
+        ui->sessions_table->setItem(ind, 3, new QTableWidgetItem(session.get_data()));
+        ui->sessions_table->setItem(ind, 4, new QTableWidgetItem(session.get_time()));
+        ui->sessions_table->setItem(ind, 5, new QTableWidgetItem(cabinet));
+        ui->sessions_table->setItem(ind, 6, new QTableWidgetItem(session.get_is_busy() ? "да" : "нет"));
+    }
 }
 
 void AdminMenu::update_users() {
@@ -102,6 +160,3 @@ void AdminMenu::set_enabled_buttons(bool b) {
     ui->delete_session->setEnabled(b);
     ui->add_session->setEnabled(b);
 }
-
-
-

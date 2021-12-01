@@ -72,7 +72,7 @@ bool DataBase::create_user_table() {
         qDebug() << "DataBase: error of create " << TABLE_USER;
         qDebug() << create_user_table.lastError().text();
         return false;
-    } else if (registrate_user(new User("Admin", "admin", "admin", 0, "", "Admin"))) {
+    } else if (registrate_doctor(new User("Admin", "admin", "admin", "Admin"))) {
         qDebug() << "DataBase: successful created " << TABLE_USER;
         return true;
     }
@@ -122,16 +122,17 @@ bool DataBase::create_sessions_table() {
     db.exec("PRAGMA foreign_keys = ON");
 
     if (!create_sec_quest_table.exec( "CREATE TABLE " TABLE_SESSIONS " ("
-                             "id INTEGER PRIMARY KEY, "
-                             "doctor_id INTEGER NOT NULL, "
-                             "user_id INTEGER, "
+                             "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                             "doctor_id VARCHAR(20) NOT NULL, "
+                             "client_id VARCHAR(20), "
+                             "cabinet INTEGER NOT NULL, "
                              "data VARCHAR(15) NOT NULL, "
-                             "time VARCHAR(10) NOT NULL, "
+                             "time VARCHAR(15) NOT NULL, "
                              "is_busy INTEGER NOT NULL, "
                              "FOREIGN KEY (doctor_id) REFERENCES "
-                             TABLE_USER "(id), "
-                             "FOREIGN KEY (user_id) REFERENCES "
-                             TABLE_USER "(id)"
+                             TABLE_USER "(login), "
+                             "FOREIGN KEY (client_id) REFERENCES "
+                             TABLE_USER "(login)"
                              ")"
                 )) {
         qDebug() << "DataBase: error of create " << TABLE_SESSIONS;
@@ -187,7 +188,8 @@ bool DataBase::registrate_doctor(User *new_doc) {
 
 bool DataBase::is_login_exist(QString login) {
     QSqlQuery is_login_exist;
-    is_login_exist.prepare("SELECT * FROM " TABLE_USER " WHERE login = (:login)");
+    is_login_exist.prepare("SELECT * FROM " TABLE_USER " "
+                           "WHERE login = (:login)");
     is_login_exist.bindValue(":login", login);
 
     if (is_login_exist.exec()) {
@@ -201,7 +203,8 @@ bool DataBase::is_login_exist(QString login) {
 
 bool DataBase::is_authorize_data_right(QString login, QString password) {
     QSqlQuery is_password_right;
-    is_password_right.prepare("SELECT * FROM " TABLE_USER " WHERE login = (:login) AND password = (:password)");
+    is_password_right.prepare("SELECT * FROM " TABLE_USER " "
+                              "WHERE login = (:login) AND password = (:password)");
     is_password_right.bindValue(":login", login);
     is_password_right.bindValue(":password", password);
 
@@ -216,7 +219,8 @@ bool DataBase::is_authorize_data_right(QString login, QString password) {
 
 bool DataBase::is_secret_answer_right(QString login, QString answer) {
     QSqlQuery is_password_right;
-    is_password_right.prepare("SELECT * FROM " TABLE_USER " WHERE login = (:login) AND sec_ques_answer = (:answer)");
+    is_password_right.prepare("SELECT * FROM " TABLE_USER " "
+                              "WHERE login = (:login) AND sec_ques_answer = (:answer)");
     is_password_right.bindValue(":login", login);
     is_password_right.bindValue(":answer", answer);
 
@@ -247,8 +251,8 @@ QList<QString> DataBase::questions() {
 
 QString DataBase::pull_question(int index) {
     QSqlQuery pull_question;
-    pull_question.prepare("SELECT question FROM " TABLE_SECRET_QUESTIONS
-                          " WHERE id = (:id)");
+    pull_question.prepare("SELECT question FROM " TABLE_SECRET_QUESTIONS " "
+                          "WHERE id = (:id)");
     pull_question.bindValue(":id", index);
 
     if (pull_question.exec()) {
@@ -306,8 +310,8 @@ std::vector<User> DataBase::users(QString role) {
 
 User* DataBase::pull_user(QString login) {
     QSqlQuery pull_user;
-    pull_user.prepare("SELECT * FROM " TABLE_USER
-                      " WHERE login = (:log)");
+    pull_user.prepare("SELECT * FROM " TABLE_USER " "
+                      "WHERE login = (:log)");
     pull_user.bindValue(":log", login);
 
     if (pull_user.exec()) {
@@ -327,10 +331,27 @@ User* DataBase::pull_user(QString login) {
     }
 }
 
+QString DataBase::pull_user_name(QString login) {
+    QSqlQuery pull_pass;
+    pull_pass.prepare("SELECT name FROM " TABLE_USER " "
+                      "WHERE login = (:log)");
+    pull_pass.bindValue(":log", login);
+
+    if (pull_pass.exec()) {
+        if (pull_pass.next()) {
+            qDebug() << "DataBase: name is pulled successfully";
+            return pull_pass.value(0).toString();
+        }
+    } else {
+        qDebug() << "DataBase: error of pull password " << TABLE_USER;
+        qDebug() << pull_pass.lastError().text();
+    }
+}
+
 QString DataBase::pull_user_password(QString login) {
     QSqlQuery pull_pass;
-    pull_pass.prepare("SELECT password FROM " TABLE_USER
-                      " WHERE login = (:log)");
+    pull_pass.prepare("SELECT password FROM " TABLE_USER " "
+                      "WHERE login = (:log)");
     pull_pass.bindValue(":log", login);
 
     if (pull_pass.exec()) {
@@ -346,8 +367,8 @@ QString DataBase::pull_user_password(QString login) {
 
 QString DataBase::pull_user_role(QString login) {
     QSqlQuery pull_role;
-    pull_role.prepare("SELECT role FROM " TABLE_USER
-                      " WHERE login = (:log)");
+    pull_role.prepare("SELECT role FROM " TABLE_USER " "
+                      "WHERE login = (:log)");
     pull_role.bindValue(":log", login);
 
     if (pull_role.exec()) {
@@ -393,7 +414,9 @@ bool DataBase::remove_user(QString login) {
 
 bool DataBase::update_user_login(QString login, QString new_login) {
     QSqlQuery update_user_login;
-    update_user_login.prepare("UPDATE " TABLE_USER " SET login = (:log) WHERE login = (:nlog)");
+    update_user_login.prepare("UPDATE " TABLE_USER " "
+                              "SET login = (:log) "
+                              "WHERE login = (:nlog)");
     update_user_login.bindValue(":log", login);
     update_user_login.bindValue(":nlog", new_login);
 
@@ -409,7 +432,9 @@ bool DataBase::update_user_login(QString login, QString new_login) {
 
 bool DataBase::update_user_name(QString login, QString new_name) {
     QSqlQuery update_user_name;
-    update_user_name.prepare("UPDATE " TABLE_USER " SET name = (:nm) WHERE login = (:log)");
+    update_user_name.prepare("UPDATE " TABLE_USER " "
+                             "SET name = (:nm) "
+                              "WHERE login = (:log)");
     update_user_name.bindValue(":log", login);
     update_user_name.bindValue(":nm", new_name);
 
@@ -425,7 +450,9 @@ bool DataBase::update_user_name(QString login, QString new_name) {
 
 bool DataBase::update_user_password(QString login, QString new_pass) {
     QSqlQuery update_user_pass;
-    update_user_pass.prepare("UPDATE " TABLE_USER " SET password = (:nm) WHERE login = (:log)");
+    update_user_pass.prepare("UPDATE " TABLE_USER " "
+                             "SET password = (:nm) "
+                             "WHERE login = (:log)");
     update_user_pass.bindValue(":log", login);
     update_user_pass.bindValue(":nm", new_pass);
 
@@ -441,7 +468,9 @@ bool DataBase::update_user_password(QString login, QString new_pass) {
 
 bool DataBase::update_user_secret_question(QString login, int ind) {
     QSqlQuery update_user_secret_question;
-    update_user_secret_question.prepare("UPDATE " TABLE_USER " SET secret_question = (:sq) WHERE login = (:log)");
+    update_user_secret_question.prepare("UPDATE " TABLE_USER " "
+                                        "SET secret_question = (:sq) "
+                                        "WHERE login = (:log)");
     update_user_secret_question.bindValue(":log", login);
     update_user_secret_question.bindValue(":sq", ind);
 
@@ -457,7 +486,9 @@ bool DataBase::update_user_secret_question(QString login, int ind) {
 
 bool DataBase::update_user_secret_question_answer(QString login, QString answer) {
     QSqlQuery update_user_secret_question_answer;
-    update_user_secret_question_answer.prepare("UPDATE " TABLE_USER " SET sec_ques_answer = (:sqa) WHERE login = (:log)");
+    update_user_secret_question_answer.prepare("UPDATE " TABLE_USER " "
+                                               "SET sec_ques_answer = (:sqa) "
+                                               "WHERE login = (:log)");
     update_user_secret_question_answer.bindValue(":log", login);
     update_user_secret_question_answer.bindValue(":sqa", answer);
 
@@ -471,3 +502,174 @@ bool DataBase::update_user_secret_question_answer(QString login, QString answer)
     }
 }
 
+bool DataBase::add_session(Session *new_session) {
+    QSqlQuery add_sesion;
+    add_sesion.prepare("INSERT INTO " TABLE_SESSIONS "("
+                       "doctor_id, cabinet, data, time, is_busy) "
+                       "VALUES (:did, :cab, :dt, :tm, :isb)");
+    add_sesion.addBindValue(new_session->get_doctor_id());
+    add_sesion.addBindValue(new_session->get_cabinet());
+    add_sesion.addBindValue(new_session->get_data());
+    add_sesion.addBindValue(new_session->get_time());
+    add_sesion.addBindValue(0);
+
+    if (!add_sesion.exec()) {
+        qDebug() << "error add_session in " << TABLE_SESSIONS;
+        qDebug() << add_sesion.lastError().text();
+        return false;
+    } else {
+        qDebug() << "session successfully created in " << TABLE_SESSIONS;
+        return true;
+    }
+}
+
+bool DataBase::remove_session(int id) {
+    QSqlQuery remove_session;
+    remove_session.prepare("DELETE FROM " TABLE_SESSIONS " "
+                           "WHERE id = (:id)");
+    remove_session.addBindValue(id);
+
+    if (remove_session.exec()) {
+        qDebug() << "Session is deleted";
+    } else {
+        qDebug() << "error session is not deleted";
+    }
+}
+
+bool DataBase::remove_session(QString doctor) {
+    QSqlQuery remove_session;
+    remove_session.prepare("DELETE FROM " TABLE_SESSIONS " "
+                           "WHERE doctor_id = (:d_id)");
+    remove_session.addBindValue(doctor);
+
+    if (remove_session.exec()) {
+        qDebug() << "Session is deleted";
+    } else {
+        qDebug() << "error session is not deleted";
+    }
+}
+
+std::vector<Session> DataBase::sessions() {
+    QSqlQuery pull_sessions;
+    std::vector<Session> sessions;
+    pull_sessions.prepare("SELECT * "
+                          "FROM " TABLE_SESSIONS);
+
+    if (pull_sessions.exec()) {
+        while (pull_sessions.next()) {
+            sessions.push_back(Session(pull_sessions.value(0).toInt(), pull_sessions.value(1).toString(),
+                                       pull_sessions.value(2).toString(), pull_sessions.value(3).toInt(),
+                                       pull_sessions.value(4).toString(), pull_sessions.value(5).toString(),
+                                       pull_sessions.value(6).toBool()));
+        }
+        qDebug() << " sessions pulled successfully from " << TABLE_SESSIONS;
+    } else {
+        qDebug() << "DataBase: error of pull sessions from " << TABLE_SESSIONS;
+        qDebug() << pull_sessions.lastError().text();
+    }
+
+    return sessions;
+}
+
+std::vector<Session> DataBase::sessions(bool b) {
+    QSqlQuery pull_sessions;
+    std::vector<Session> sessions;
+    pull_sessions.prepare("SELECT * "
+                          "FROM " TABLE_SESSIONS " "
+                          "WHERE is_busy = (:isb)");
+    pull_sessions.addBindValue(b ? 1 : 0);
+
+    if (pull_sessions.exec()) {
+        while (pull_sessions.next()) {
+            sessions.push_back(Session(pull_sessions.value(0).toInt(), pull_sessions.value(1).toString(),
+                                       pull_sessions.value(2).toString(), pull_sessions.value(3).toInt(),
+                                       pull_sessions.value(4).toString(), pull_sessions.value(5).toString(),
+                                       pull_sessions.value(6).toBool()));
+        }
+        qDebug() << " sessions pulled successfully from " << TABLE_SESSIONS;
+    } else {
+        qDebug() << "DataBase: error of pull sessions from " << TABLE_SESSIONS;
+        qDebug() << pull_sessions.lastError().text();
+    }
+
+    return sessions;
+}
+
+std::vector<Session> DataBase::sessions(QString login) {
+    QSqlQuery pull_sessions;
+    std::vector<Session> sessions;
+    pull_sessions.prepare("SELECT * "
+                          "FROM " TABLE_SESSIONS " "
+                          "WHERE client_id = (:log)");
+    pull_sessions.addBindValue(login);
+
+    if (pull_sessions.exec()) {
+        while (pull_sessions.next()) {
+            sessions.push_back(Session(pull_sessions.value(0).toInt(), pull_sessions.value(1).toString(),
+                                       pull_sessions.value(2).toString(), pull_sessions.value(3).toInt(),
+                                       pull_sessions.value(4).toString(), pull_sessions.value(5).toString(),
+                                       pull_sessions.value(6).toBool()));
+        }
+        qDebug() << " sessions pulled successfully from " << TABLE_SESSIONS;
+    } else {
+        qDebug() << "DataBase: error of pull sessions from " << TABLE_SESSIONS;
+        qDebug() << pull_sessions.lastError().text();
+    }
+
+    return sessions;
+}
+
+bool DataBase::update_session(int id) {
+    QSqlQuery update_session;
+    update_session.prepare("UPDATE " TABLE_SESSIONS " "
+                           "SET client_id = NULL, is_busy = (:isb) "
+                           "WHERE id = (:id)");
+    update_session.bindValue(":isb", 0);
+    update_session.bindValue(":id", id);
+
+    if (update_session.exec()) {
+        qDebug() << "DataBase: session_client is updated in " << TABLE_SESSIONS;
+        return true;
+    } else {
+        qDebug() << "DataBase: error update session_client in " << TABLE_SESSIONS;
+        qDebug() << update_session.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::update_session(int id, QString client_id) {
+    QSqlQuery update_session;
+    update_session.prepare("UPDATE " TABLE_SESSIONS " "
+                           "SET client_id = (:cid), is_busy = (:isb) "
+                           "WHERE id = (:id)");
+    update_session.bindValue(":cid", client_id);
+    update_session.bindValue(":isb", 1);
+    update_session.bindValue(":id", id);
+
+    if (update_session.exec()) {
+        qDebug() << "DataBase: session_client is updated in " << TABLE_SESSIONS;
+        return true;
+    } else {
+        qDebug() << "DataBase: error update session_client in " << TABLE_SESSIONS;
+        qDebug() << update_session.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::pull_session_is_busy(int id) {
+    QSqlQuery pull_session_is_busy;
+    pull_session_is_busy.prepare("SELECT is_busy "
+                          "FROM " TABLE_SESSIONS " "
+                          "WHERE id = (:id)");
+    pull_session_is_busy.addBindValue(id);
+
+    if (pull_session_is_busy.exec()) {
+        if (pull_session_is_busy.next()) {
+            return pull_session_is_busy.value(0).toBool();
+        }
+        qDebug() << " sessions pulled successfully from " << TABLE_SESSIONS;
+    } else {
+        qDebug() << "DataBase: error of pull sessions from " << TABLE_SESSIONS;
+        qDebug() << pull_session_is_busy.lastError().text();
+    }
+}

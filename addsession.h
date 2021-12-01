@@ -2,6 +2,8 @@
 #define ADDSESSION_H
 
 #include <QDialog>
+#include <QMessageBox>
+
 #include "database.h"
 
 namespace Ui {
@@ -16,6 +18,12 @@ public:
     explicit AddSession(QWidget *parent = nullptr);
     ~AddSession();
 
+signals:
+    void update();
+
+public slots:
+    void update_ui();
+
 private slots:
     void on_add_clicked();
 
@@ -24,6 +32,7 @@ private slots:
 private:
     Ui::AddSession *ui;
     DataBase db;
+    std::vector<User> doctors;
 
     void clear_ui();
     bool check_fields();
