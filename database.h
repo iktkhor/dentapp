@@ -2,10 +2,11 @@
 #define DATABASE_H
 
 #include <QString>
-#include <QtSql/QSqlDatabase>
-#include <QtSql/QSqlError>
-#include <QtSql/QSqlQuery>
-#include <QtSql/QSqlRecord>
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include <QFile>
 #include <QDebug>
 #include <QCoreApplication>

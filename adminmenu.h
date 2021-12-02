@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWidget>
+//#include <QHeaderView>
 #include <iostream>
 #include <vector>
 #include <set>
@@ -44,6 +45,10 @@ private slots:
     void on_delete_session_clicked();
 
     void on_cancel_app_clicked();
+
+    void on_sessions_table_cellClicked(int row, int column);
+
+    void on_users_table_cellClicked(int row, int column);
 
 private:
     Ui::AdminMenu *ui;

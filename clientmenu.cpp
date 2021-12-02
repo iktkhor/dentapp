@@ -96,6 +96,10 @@ void ClientMenu::on_change_tables_clicked()
 
 void ClientMenu::update_free_apps() {
     ui->free_apps_table->setRowCount(0);
+    ui->free_apps_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->free_apps_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->free_apps_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
 
     for (auto session : db.sessions(false)) {
         int ind = ui->free_apps_table->rowCount();
@@ -117,6 +121,9 @@ void ClientMenu::update_free_apps() {
 
 void ClientMenu::update_my_apps() {
     ui->my_apps_table->setRowCount(0);
+    ui->my_apps_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->my_apps_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->my_apps_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
     for (auto session : db.sessions(current_user->get_login())) {
         int ind = ui->my_apps_table->rowCount();
@@ -142,5 +149,16 @@ void ClientMenu::recieve_data(User* user) {
 
 void ClientMenu::update_ui() {
     ui->stackedWidget->setCurrentIndex(0);
+    ui->change_tables->setText("Мои записи");
+    ui->make_delete_app->setText("Записаться");
     update_free_apps();
 }
+
+void ClientMenu::on_my_apps_table_cellClicked(int row, int column) {
+    ui->my_apps_table->selectRow(row);
+}
+
+void ClientMenu::on_free_apps_table_cellClicked(int row, int column) {
+    ui->free_apps_table->selectRow(row);
+}
+

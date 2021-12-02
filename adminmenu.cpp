@@ -118,6 +118,9 @@ void AdminMenu::on_change_tables_clicked() {
 
 void AdminMenu::update_sessions() {
     ui->sessions_table->setRowCount(0);
+    ui->sessions_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->sessions_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    ui->sessions_table->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Stretch);
 
     for (auto session : db.sessions()) {
         int ind = ui->sessions_table->rowCount();
@@ -127,8 +130,10 @@ void AdminMenu::update_sessions() {
         id.setNum(session.get_id());
         QString cabinet;
         cabinet.setNum(session.get_cabinet());
+        QString doc_name = db.pull_user_name(session.get_doctor_id());
+
         ui->sessions_table->setItem(ind, 0, new QTableWidgetItem(id));
-        ui->sessions_table->setItem(ind, 1, new QTableWidgetItem(session.get_doctor_id()));
+        ui->sessions_table->setItem(ind, 1, new QTableWidgetItem(doc_name));
         ui->sessions_table->setItem(ind, 2, new QTableWidgetItem(session.get_client_id()));
         ui->sessions_table->setItem(ind, 3, new QTableWidgetItem(session.get_data()));
         ui->sessions_table->setItem(ind, 4, new QTableWidgetItem(session.get_time()));
@@ -139,6 +144,9 @@ void AdminMenu::update_sessions() {
 
 void AdminMenu::update_users() {
     ui->users_table->setRowCount(0);
+    ui->users_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->users_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+
     fill_table_users(db.users("Admin"));
     fill_table_users(db.users("Doctor"));
     fill_table_users(db.users("Client"));
@@ -159,4 +167,14 @@ void AdminMenu::set_enabled_buttons(bool b) {
     ui->cancel_app->setEnabled(b);
     ui->delete_session->setEnabled(b);
     ui->add_session->setEnabled(b);
+}
+
+void AdminMenu::on_sessions_table_cellClicked(int row, int column) {
+    ui->sessions_table->selectRow(row);
+}
+
+
+void AdminMenu::on_users_table_cellClicked(int row, int column)
+{
+    ui->users_table->selectRow(row);
 }

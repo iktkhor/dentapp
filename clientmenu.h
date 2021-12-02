@@ -39,6 +39,10 @@ private slots:
 
     void on_make_delete_app_clicked();
 
+    void on_my_apps_table_cellClicked(int row, int column);
+
+    void on_free_apps_table_cellClicked(int row, int column);
+
 private:
     Ui::ClientMenu *ui;
     Settings *settings;
