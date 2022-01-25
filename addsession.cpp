@@ -6,6 +6,7 @@ AddSession::AddSession(QWidget *parent) :
     ui(new Ui::AddSession)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Добавление записей");
 
     db.connect_to_database();
 }
@@ -20,20 +21,21 @@ void AddSession::on_add_clicked()
     if (check_fields()) {
        for (int i(0); i < ui->count->value(); i++) {
            QString time_start;
-           time_start.setNum(ui->time->text().toInt() + i);
+           time_start.setNum(ui->hours->text().toInt() + i);
            QString time_end;
-           time_end.setNum(ui->time->text().toInt() + i + 1);
-           QString time = time_start + " - " + time_end;
-           QString data = ui->data->text();
+           time_end.setNum(ui->hours->text().toInt() + i + 1);
+           QString time = time_start + ":" + ui->mins->text() + " - " + time_end + ":" + ui->mins->text();
+           QString data = ui->date->date().toString("yyyy-MM-dd");
+           int cabinet = ui->cabinet->text().toInt();
+
            QString login = doctors[ui->doctor->currentIndex() - 1].get_login();
-           db.add_session(new Session(login, 228, data, time));
+           db.add_session(new Session(login, cabinet, data, time));
        }
 
        emit update();
        clear_ui();
     }
 }
-
 
 void AddSession::on_back_clicked()
 {
@@ -46,12 +48,12 @@ bool AddSession::check_fields() {
         QMessageBox::information(this, "Предупреждение", "Вы не выбрали доктора");
         return false;
     }
-    if (ui->data->text() == "") {
+    if (ui->date->text() == "") {
         QMessageBox::information(this, "Предупреждение", "Вы не ввели дату");
         return false;
     }
-    if (ui->time->text() == "") {
-        QMessageBox::information(this, "Предупреждение", "Вы не ввели время начала");
+    if (ui->hours->text() == "" && ui->mins->text() == "") {
+        QMessageBox::information(this, "Предупреждение", "Вы не ввели полностью время начала");
         return false;
     }
 
@@ -66,12 +68,15 @@ void AddSession::update_ui() {
     for (auto doctor : doctors) {
         ui->doctor->addItem(doctor.get_name());
     }
+
+    ui->date->setMinimumDate(QDate::currentDate());
 }
 
 void AddSession::clear_ui() {
     ui->doctor->setCurrentIndex(0);
-    ui->data->setText("");
-    ui->time->setText("");
+    ui->date->clear();
+    ui->hours->setText("");
+    ui->mins->setText("");
     ui->count->setValue(1);
 }
 

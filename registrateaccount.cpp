@@ -6,6 +6,7 @@ RegistrateAccount::RegistrateAccount(QWidget *parent) :
     ui(new Ui::RegistrateAccount)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Регистрация пользователя");
 
     db.connect_to_database();
 

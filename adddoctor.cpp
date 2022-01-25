@@ -6,6 +6,7 @@ AddDoctor::AddDoctor(QWidget *parent) :
     ui(new Ui::AddDoctor)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Добавление врача");
 
     db.connect_to_database();
 }

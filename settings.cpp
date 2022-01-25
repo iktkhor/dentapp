@@ -6,6 +6,7 @@ Settings::Settings(QWidget *parent) :
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Настройки профиля");
 
     db.connect_to_database();
     qs = db.questions();

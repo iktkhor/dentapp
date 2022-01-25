@@ -9,6 +9,7 @@ EntryWindow::EntryWindow(QWidget *parent)
     , ui(new Ui::EntryWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Меню входа");
 
     reg_acc_window = new RegistrateAccount(this);
     rem_pass_window = new RemindPassword(this);
@@ -36,11 +37,12 @@ EntryWindow::EntryWindow(QWidget *parent)
 
     connect(this, &EntryWindow::update_table, client_menu_window, &ClientMenu::update_ui);
 
+    connect(this, &EntryWindow::send_data, doctor_menu_window, &DoctorMenu::recieve_data);
+
     is_pass_vis = false;
     ui->lineEdit_password->setEchoMode(QLineEdit::Password);
 
     db.connect_to_database();
-
 }
 
 EntryWindow::~EntryWindow()
@@ -64,6 +66,7 @@ void EntryWindow::on_entry_clicked()
             client_menu_window->show();
         } else if (role == "Doctor") {
             this->close();
+            emit send_data(db.pull_user(log));
             ui->lineEdit_password->setText("");
             doctor_menu_window->show();
         } else if (role == "Admin") {

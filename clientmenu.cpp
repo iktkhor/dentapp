@@ -7,6 +7,7 @@ ClientMenu::ClientMenu(QWidget *parent) :
 {
     ui->setupUi(this);
     settings = new Settings();
+    this->setWindowTitle("Меню клиента");
 
     db.connect_to_database();
 

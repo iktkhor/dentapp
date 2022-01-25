@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QWidget>
-//#include <QHeaderView>
 #include <iostream>
 #include <vector>
 #include <set>

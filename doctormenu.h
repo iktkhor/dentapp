@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "database.h"
+
 namespace Ui {
 class DoctorMenu;
 }
@@ -21,8 +23,15 @@ signals:
 private slots:
     void on_exit_clicked();
 
+public slots:
+    void recieve_data(User* user);
+
 private:
     Ui::DoctorMenu *ui;
+    DataBase db;
+    User *current_user;
+
+    void update_sessions();
 };
 
 #endif // DOCTORMENU_H

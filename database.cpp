@@ -598,9 +598,36 @@ std::vector<Session> DataBase::sessions(bool b) {
 std::vector<Session> DataBase::sessions(QString login) {
     QSqlQuery pull_sessions;
     std::vector<Session> sessions;
+
     pull_sessions.prepare("SELECT * "
                           "FROM " TABLE_SESSIONS " "
                           "WHERE client_id = (:log)");
+    pull_sessions.addBindValue(login);
+
+    if (pull_sessions.exec()) {
+        while (pull_sessions.next()) {
+            sessions.push_back(Session(pull_sessions.value(0).toInt(), pull_sessions.value(1).toString(),
+                                       pull_sessions.value(2).toString(), pull_sessions.value(3).toInt(),
+                                       pull_sessions.value(4).toString(), pull_sessions.value(5).toString(),
+                                       pull_sessions.value(6).toBool()));
+        }
+        qDebug() << " sessions pulled successfully from " << TABLE_SESSIONS;
+    } else {
+        qDebug() << "DataBase: error of pull sessions from " << TABLE_SESSIONS;
+        qDebug() << pull_sessions.lastError().text();
+    }
+
+    return sessions;
+}
+
+std::vector<Session> DataBase::doctor_sessions(QString login)
+{
+    QSqlQuery pull_sessions;
+    std::vector<Session> sessions;
+
+    pull_sessions.prepare("SELECT * "
+                          "FROM " TABLE_SESSIONS " "
+                          "WHERE doctor_id = (:log)");
     pull_sessions.addBindValue(login);
 
     if (pull_sessions.exec()) {

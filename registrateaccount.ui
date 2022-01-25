@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>420</width>
-    <height>480</height>
+    <height>626</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>550</width>
-    <height>800</height>
+    <width>420</width>
+    <height>700</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -36,8 +36,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>383</width>
-        <height>479</height>
+        <width>400</width>
+        <height>606</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -104,7 +104,7 @@
           <number>20</number>
          </property>
          <property name="verticalSpacing">
-          <number>20</number>
+          <number>10</number>
          </property>
          <property name="leftMargin">
           <number>14</number>
@@ -165,7 +165,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_login">
            <property name="minimumSize">
             <size>
@@ -187,7 +187,7 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
+         <item row="2" column="1">
           <widget class="QLineEdit" name="lineEdit_login">
            <property name="minimumSize">
             <size>
@@ -203,7 +203,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="4" column="0">
           <widget class="QLabel" name="label_pass">
            <property name="minimumSize">
             <size>
@@ -225,7 +225,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="4" column="1">
           <widget class="QLineEdit" name="lineEdit_password">
            <property name="minimumSize">
             <size>
@@ -244,7 +244,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="label_repeat_pass">
            <property name="minimumSize">
             <size>
@@ -267,7 +267,7 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="6" column="1">
           <widget class="QLineEdit" name="lineEdit_password_repeat">
            <property name="minimumSize">
             <size>
@@ -280,6 +280,27 @@
              <width>16777215</width>
              <height>16777215</height>
             </size>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Имя должно быть не короче 3 символов&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;и не больше 20&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Логин должен быть не короче 5 символов&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;и не длиннее 20&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Пароль должен быть не короче 5 символов&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;и не длиннее 20&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>

@@ -59,6 +59,7 @@ public:
     std::vector<Session> sessions();
     std::vector<Session> sessions(bool b);
     std::vector<Session> sessions(QString login);
+    std::vector<Session> doctor_sessions(QString login);
     Session* pull_session(int id);
     bool pull_session_is_busy(int id);
 private:

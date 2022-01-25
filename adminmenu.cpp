@@ -7,6 +7,7 @@ AdminMenu::AdminMenu(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
+    this->setWindowTitle("Меню админа");
 
     db.connect_to_database();
 

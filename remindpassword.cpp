@@ -6,6 +6,7 @@ RemindPassword::RemindPassword(QWidget *parent) :
     ui(new Ui::RemindPassword)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Напоминание пароля");
     change_buttons_enable(false);
     clear_ui();
 
