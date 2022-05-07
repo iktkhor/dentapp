@@ -20,7 +20,12 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class EntryWindow; }
 QT_END_NAMESPACE
-
+/*!
+ * \brief Класс для отображения меню входа в приложение
+ *
+ * С помощью данного класса происходит отображение меню входа, в котором можно
+ * выполнить вход в аккаунт, которому присвоена одна из 3-х ролей
+ */
 class EntryWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,6 +35,9 @@ public:
     ~EntryWindow();
 
 signals:
+    /*!
+     * \brief Сигнал, посылающий информацию о вошедшем в приложение пользователе
+     */
     void send_data(User* user);
     void update_table();
 

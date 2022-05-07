@@ -14,7 +14,12 @@
 namespace Ui {
 class AdminMenu;
 }
-
+/*!
+ * \brief Класс для отображения меню админа
+ *
+ * С помощью данного класса происходит отображение меню админа, в котором можно
+ * удалять и добавлять сеансы, а также управлять всеми аккаунтами
+ */
 class AdminMenu : public QMainWindow
 {
     Q_OBJECT
@@ -24,10 +29,19 @@ public:
     ~AdminMenu();
 
 signals:
+    /*!
+     * \brief Сигнал используемый для открытия меню входа
+     */
     void entryWindow();
+    /*!
+     * \brief Сигнал используемый обновления таблицы в меню
+     */
     void update();
 
 public slots:
+    /*!
+     * \brief Слот, с помощью которого происходит обновление таблицы сеансов
+     */
     void update_sessions();
 
 private slots:

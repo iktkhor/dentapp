@@ -17,7 +17,7 @@ bool DataBase::restore_database() {
     if(this->open_database()) {
         return (this->create_tables()) ? true : false;
     } else {
-        qDebug() << "Не удалось восстановить базу данных";
+        qDebug() << "Can't restore database";
         return false;
     }
 
@@ -399,7 +399,7 @@ int DataBase::pull_user_question(QString login) {
     }
 }
 
-bool DataBase::remove_user(QString login) {
+void DataBase::remove_user(QString login) {
     QSqlQuery remove_user;
     remove_user.prepare("DELETE FROM " TABLE_USER " "
                         "WHERE login = (:log)");
@@ -523,7 +523,7 @@ bool DataBase::add_session(Session *new_session) {
     }
 }
 
-bool DataBase::remove_session(int id) {
+void DataBase::remove_session(int id) {
     QSqlQuery remove_session;
     remove_session.prepare("DELETE FROM " TABLE_SESSIONS " "
                            "WHERE id = (:id)");
@@ -536,7 +536,7 @@ bool DataBase::remove_session(int id) {
     }
 }
 
-bool DataBase::remove_session(QString doctor) {
+void DataBase::remove_session(QString doctor) {
     QSqlQuery remove_session;
     remove_session.prepare("DELETE FROM " TABLE_SESSIONS " "
                            "WHERE doctor_id = (:d_id)");

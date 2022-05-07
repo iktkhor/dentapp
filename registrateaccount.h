@@ -10,7 +10,12 @@
 namespace Ui {
 class RegistrateAccount;
 }
-
+/*!
+* \brief Класс для отображения меню регистрации нового аккаунта
+*
+* С помощью данного класса происходит отображение меню регистрации нового аккаунта, в котором можно
+* создать новый пользовательский аккаунт, которому будет присвоена роль "Клиент"
+*/
 class RegistrateAccount : public QDialog
 {
     Q_OBJECT
@@ -18,6 +23,9 @@ class RegistrateAccount : public QDialog
 public:
     explicit RegistrateAccount(QWidget *parent = nullptr);
     ~RegistrateAccount();
+    /*!
+     * \brief Метод, проверяющий правильность заполнения всех полей
+     */
     bool check_required_fields();
     void fill_user();
 

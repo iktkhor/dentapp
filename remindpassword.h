@@ -10,7 +10,12 @@
 namespace Ui {
 class RemindPassword;
 }
-
+/*!
+* \brief Класс для отображения меню напоминания пароля
+*
+* С помощью данного класса происходит отображение меню напоминания пароля, в котором можно
+* пользольватель может восстановить утерянный пароль, с помощью секретного вопроса
+*/
 class RemindPassword : public QDialog
 {
     Q_OBJECT
@@ -20,6 +25,9 @@ public:
     ~RemindPassword();
 
 signals:
+    /*!
+     * \brief Сигнал используемый для открытия меню входа
+     */
     void entryWindow();
 
 private slots:

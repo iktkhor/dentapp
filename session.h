@@ -4,6 +4,9 @@
 #include <QString>
 #include <QDateTime>
 
+/*!
+* \brief Класс для отображения стуктуры Session
+*/
 class Session
 {
 public:

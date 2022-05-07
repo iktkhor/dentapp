@@ -3,6 +3,9 @@
 
 #include <QString>
 
+/*!
+* \brief Класс для отображения стуктуры User
+*/
 class User
 {
 public:

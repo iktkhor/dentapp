@@ -13,7 +13,12 @@
 namespace Ui {
 class ClientMenu;
 }
-
+/*!
+ * \brief Класс для отображения меню клиента
+ *
+ * С помощью данного класса происходит отображение меню клиента, в котором можно
+ * производить запись на сеансы и отменять их
+ */
 class ClientMenu : public QMainWindow
 {
     Q_OBJECT
@@ -23,10 +28,16 @@ public:
     ~ClientMenu();
 
 signals:
+    /*!
+     * \brief Сигнал используемый для открытия меню входа
+     */
     void entryWindow();
     void send_data(User* current_user);
 
 public slots:
+    /*!
+     * \brief Слот для получения данных о текущем пользователе из меню входа
+     */
     void recieve_data(User* user);
     void update_ui();
 
